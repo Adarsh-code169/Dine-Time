@@ -1,50 +1,175 @@
-# Welcome to your Expo app 👋
+# 🍽️ Dine-Time
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern React Native food delivery application built with Expo, featuring restaurant browsing, cart management, favorites, and order history.
 
-## Get started
+## ✨ Features
 
-1. Install dependencies
+- 🏪 **Restaurant Browsing**: Browse through various restaurants with beautiful card layouts
+- 🔍 **Search & Filter**: Search for restaurants and filter by cuisine type
+- ❤️ **Favorites**: Save your favorite restaurants for quick access
+- 🛒 **Shopping Cart**: Add items to cart with quantity management
+- 📝 **Order History**: View your past orders
+- 👤 **User Profile**: Manage your account and preferences
+- 🔐 **Authentication**: Login and signup functionality
+- 📱 **Bottom Tab Navigation**: Easy navigation between different sections
 
-   ```bash
-   npm install
-   ```
+## 🛠️ Tech Stack
 
-2. Start the app
+- **Framework**: [Expo](https://expo.dev) ~54.0.23
+- **UI Library**: React Native 0.81.5
+- **Navigation**: React Navigation (Bottom Tabs, Native Stack)
+- **Styling**: NativeWind (TailwindCSS for React Native)
+- **State Management**: Zustand
+- **Icons**: Expo Vector Icons
+- **Animations**: React Native Reanimated
+- **Gestures**: React Native Gesture Handler
 
-   ```bash
-   npx expo start
-   ```
+## 📋 Prerequisites
 
-In the output, you'll find options to open the app in a
+Before you begin, ensure you have the following installed:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [Node.js](https://nodejs.org/) (v16 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- [Expo Go](https://expo.dev/go) app on your mobile device (for testing)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🚀 Getting Started
 
-## Get a fresh project
-
-When you're ready, run:
+### 1. Install Dependencies
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Start the Development Server
 
-## Learn more
+```bash
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### 3. Run the App
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+After starting the development server, you'll see options to run the app on:
 
-## Join the community
+- **Android Emulator**: Press `a`
+- **iOS Simulator**: Press `i` (macOS only)
+- **Expo Go**: Scan the QR code with your Expo Go app
+- **Web Browser**: Press `w`
 
-Join our community of developers creating universal apps.
+## 📁 Project Structure
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
+Dine-Time/
+├── app/                        # Main application directory
+│   ├── (tabs)/                # Tab-based navigation screens
+│   │   ├── home/              # Home screen with restaurant listings
+│   │   ├── cart.jsx           # Shopping cart screen
+│   │   ├── favorites.jsx      # Favorite restaurants screen
+│   │   ├── history.jsx        # Order history screen
+│   │   └── profile.jsx        # User profile screen
+│   ├── components/            # Reusable components
+│   │   ├── RestaurantCard.jsx # Restaurant card component
+│   │   └── MenuItem.jsx       # Menu item component
+│   ├── store/                 # Zustand state management
+│   │   ├── favoritesStore.js  # Favorites state
+│   │   └── cartStore.js       # Cart state
+│   ├── data/                  # Mock data
+│   ├── login.jsx              # Login screen
+│   ├── signup.jsx             # Signup screen
+│   └── _layout.jsx            # Root layout
+├── assets/                    # Images and static files
+├── app.json                   # Expo configuration
+├── package.json               # Dependencies
+└── tailwind.config.js         # TailwindCSS configuration
+```
+
+## 🎯 Key Features Explained
+
+### Restaurant Cards
+Each restaurant card displays:
+- Restaurant image with favorite toggle
+- Restaurant name and category
+- Rating badge
+- Delivery time
+- Delivery fee
+
+### Favorites System
+- Toggle favorites with heart icon
+- Managed using Zustand state
+- Persists across navigation
+
+### Shopping Cart
+- Add/remove items
+- Update quantities
+- View total price
+- Checkout functionality
+
+### Navigation
+- Bottom tab navigation for main sections
+- Stack navigation for detail screens
+- Smooth transitions and animations
+
+## 🎨 Styling
+
+This project uses **NativeWind**, which brings TailwindCSS to React Native. You can use familiar TailwindCSS classes for styling components.
+
+## 📱 Screens
+
+1. **Home**: Browse restaurants and menu items
+2. **Cart**: View and manage cart items
+3. **Favorites**: Quick access to favorite restaurants
+4. **History**: View past orders
+5. **Profile**: Manage user settings
+6. **Login/Signup**: Authentication screens
+
+## 🔧 Available Scripts
+
+- `npm start` - Start the Expo development server
+- `npm run android` - Open app on Android
+- `npm run ios` - Open app on iOS
+- `npm run web` - Open app in web browser
+- `npm run lint` - Run ESLint
+
+## 🐛 Troubleshooting
+
+### Metro Bundler Issues
+```bash
+# Clear cache and restart
+npx expo start -c
+```
+
+### Module Resolution Errors
+```bash
+# Clean install
+rm -rf node_modules package-lock.json
+npm install
+```
+
+## 📚 Learn More
+
+- [Expo Documentation](https://docs.expo.dev/)
+- [React Navigation](https://reactnavigation.org/)
+- [NativeWind](https://www.nativewind.dev/)
+- [Zustand](https://zustand-demo.pmnd.rs/)
+
+## 👥 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the ISC License.
+
+## 🙏 Acknowledgments
+
+- Built with [Expo](https://expo.dev)
+- Styled with [NativeWind](https://www.nativewind.dev/)
+- Icons by [Expo Vector Icons](https://icons.expo.fyi/)
+
+---
+
+**Happy Coding! 🚀**
