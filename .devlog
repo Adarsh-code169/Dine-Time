@@ -9,3 +9,4 @@
 [2026-01-13 10:23:41] feat: add user authentication and session logic
 [2026-01-14 13:42:10] feat: implement JWT generation and validation
 [2026-01-15 14:00:15] feat: add secure password hashing and crypto helpers
+[2026-01-16 10:36:14] feat: implement role-based access control (RBAC)
