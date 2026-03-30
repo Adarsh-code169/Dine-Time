@@ -31,7 +31,7 @@ Make sure you have Node.js and npm (or yarn) installed. You will also need the E
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/dine-time.git
+   git clone https://github.com/Adarsh-code169/Dine-Time
    cd dine-time
    ```
 
@@ -55,6 +55,6 @@ Make sure you have Node.js and npm (or yarn) installed. You will also need the E
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/your-username/dine-time/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Adarsh-code169/Dine-Time/issues).
 
 
