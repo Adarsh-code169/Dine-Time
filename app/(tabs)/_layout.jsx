@@ -1,28 +1,29 @@
-import { View, Text } from 'react-native';
-import React from 'react';
+import { View, Text, Platform } from 'react-native';
 import { Tabs } from 'expo-router';
-import { Colors } from '../../assets/images/Colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import useCartStore from '../store/cartStore';
+import { theme } from '../constants/theme';
 
-const TabLayout = () => {
-    const { getCartCount } = useCartStore();
-    const cartCount = getCartCount();
+export default function TabLayout() {
+    const cartCount = useCartStore((s) => s.getCartCount());
 
     return (
         <Tabs
             screenOptions={{
                 headerShown: false,
-                tabBarActiveTintColor: Colors.PRIMARY,
-                tabBarInactiveTintColor: Colors.dark.text,
+                tabBarActiveTintColor: theme.colors.primary,
+                tabBarInactiveTintColor: theme.colors.textMuted,
                 tabBarStyle: {
-                    backgroundColor: Colors.SECONDARY,
-                    paddingBottom: 14,
-                    height: 70,
+                    backgroundColor: theme.colors.surface,
+                    borderTopColor: theme.colors.surfaceElevated,
+                    borderTopWidth: 1,
+                    paddingBottom: Platform.OS === 'ios' ? 24 : 10,
+                    paddingTop: 8,
+                    height: Platform.OS === 'ios' ? 86 : 68,
                 },
                 tabBarLabelStyle: {
-                    fontSize: 12,
-                    fontWeight: 'bold',
+                    fontSize: 11,
+                    fontWeight: '600',
                 },
             }}
         >
@@ -30,45 +31,45 @@ const TabLayout = () => {
                 name="home"
                 options={{
                     title: 'Home',
-                    tabBarIcon: ({ color }) => <Ionicons name="home" size={24} color={color} />,
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'home' : 'home-outline'} size={22} color={color} />
+                    ),
                 }}
             />
             <Tabs.Screen
                 name="history"
                 options={{
-                    title: 'History',
-                    tabBarIcon: ({ color }) => <Ionicons name="time" size={24} color={color} />,
+                    title: 'Orders',
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'receipt' : 'receipt-outline'} size={22} color={color} />
+                    ),
                 }}
             />
             <Tabs.Screen
                 name="cart"
                 options={{
                     title: 'Cart',
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({ color, focused }) => (
                         <View style={{ position: 'relative' }}>
-                            <Ionicons name="cart" size={24} color={color} />
+                            <Ionicons name={focused ? 'cart' : 'cart-outline'} size={24} color={color} />
                             {cartCount > 0 && (
                                 <View
                                     style={{
                                         position: 'absolute',
-                                        top: -4,
-                                        right: -8,
-                                        backgroundColor: '#ef4444',
+                                        top: -5,
+                                        right: -10,
+                                        backgroundColor: theme.colors.danger,
                                         borderRadius: 10,
                                         minWidth: 18,
                                         height: 18,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         paddingHorizontal: 4,
+                                        borderWidth: 1.5,
+                                        borderColor: theme.colors.surface,
                                     }}
                                 >
-                                    <Text
-                                        style={{
-                                            color: '#fff',
-                                            fontSize: 10,
-                                            fontWeight: 'bold',
-                                        }}
-                                    >
+                                    <Text style={{ color: '#fff', fontSize: 10, fontWeight: 'bold' }}>
                                         {cartCount > 99 ? '99+' : cartCount}
                                     </Text>
                                 </View>
@@ -81,18 +82,20 @@ const TabLayout = () => {
                 name="favorites"
                 options={{
                     title: 'Favorites',
-                    tabBarIcon: ({ color }) => <Ionicons name="heart" size={24} color={color} />,
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'heart' : 'heart-outline'} size={22} color={color} />
+                    ),
                 }}
             />
             <Tabs.Screen
                 name="profile"
                 options={{
                     title: 'Profile',
-                    tabBarIcon: ({ color }) => <Ionicons name="person-sharp" size={24} color={color} />,
+                    tabBarIcon: ({ color, focused }) => (
+                        <Ionicons name={focused ? 'person' : 'person-outline'} size={22} color={color} />
+                    ),
                 }}
             />
         </Tabs>
     );
-};
-
-export default TabLayout;
+}

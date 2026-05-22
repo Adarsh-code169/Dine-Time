@@ -1,110 +1,69 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-/**
- * Cart Store using Zustand
- * Manages shopping cart state and operations
- */
-const useCartStore = create((set, get) => ({
-    // Cart items array - each item has: { restaurantId, restaurantName, menuItem, quantity, price }
-    cartItems: [],
+const useCartStore = create(
+    persist(
+        (set, get) => ({
+            cartItems: [],
 
-    /**
-     * Add item to cart or increase quantity if already exists
-     * @param {Object} item - { restaurantId, restaurantName, menuItem: { id, name, price, image } }
-     */
-    addToCart: (item) => {
-        const { cartItems } = get();
-        const existingItemIndex = cartItems.findIndex(
-            (cartItem) =>
-                cartItem.restaurantId === item.restaurantId &&
-                cartItem.menuItem.id === item.menuItem.id
-        );
+            addToCart: (item) => {
+                const { cartItems } = get();
+                const idx = cartItems.findIndex(
+                    (c) =>
+                        c.restaurantId === item.restaurantId &&
+                        c.menuItem.id === item.menuItem.id
+                );
+                if (idx > -1) {
+                    const updated = [...cartItems];
+                    updated[idx].quantity += 1;
+                    set({ cartItems: updated });
+                } else {
+                    set({ cartItems: [...cartItems, { ...item, quantity: 1 }] });
+                }
+            },
 
-        if (existingItemIndex > -1) {
-            // Item already exists, increase quantity
-            const updatedCart = [...cartItems];
-            updatedCart[existingItemIndex].quantity += 1;
-            set({ cartItems: updatedCart });
-        } else {
-            // New item, add to cart with quantity 1
-            set({
-                cartItems: [
-                    ...cartItems,
-                    {
-                        ...item,
-                        quantity: 1,
-                    },
-                ],
-            });
+            updateQuantity: (restaurantId, menuItemId, newQuantity) => {
+                const { cartItems } = get();
+                if (newQuantity <= 0) {
+                    set({
+                        cartItems: cartItems.filter(
+                            (i) => !(i.restaurantId === restaurantId && i.menuItem.id === menuItemId)
+                        ),
+                    });
+                } else {
+                    set({
+                        cartItems: cartItems.map((i) =>
+                            i.restaurantId === restaurantId && i.menuItem.id === menuItemId
+                                ? { ...i, quantity: newQuantity }
+                                : i
+                        ),
+                    });
+                }
+            },
+
+            removeFromCart: (restaurantId, menuItemId) => {
+                const { cartItems } = get();
+                set({
+                    cartItems: cartItems.filter(
+                        (i) => !(i.restaurantId === restaurantId && i.menuItem.id === menuItemId)
+                    ),
+                });
+            },
+
+            clearCart: () => set({ cartItems: [] }),
+
+            getCartCount: () =>
+                get().cartItems.reduce((t, i) => t + i.quantity, 0),
+
+            getTotalPrice: () =>
+                get().cartItems.reduce((t, i) => t + i.menuItem.price * i.quantity, 0),
+        }),
+        {
+            name: 'dinetime-cart',
+            storage: createJSONStorage(() => AsyncStorage),
         }
-    },
-
-    /**
-     * Update quantity of a cart item
-     * @param {number} restaurantId
-     * @param {number} menuItemId
-     * @param {number} newQuantity
-     */
-    updateQuantity: (restaurantId, menuItemId, newQuantity) => {
-        const { cartItems } = get();
-        if (newQuantity <= 0) {
-            // Remove item if quantity is 0 or less
-            set({
-                cartItems: cartItems.filter(
-                    (item) =>
-                        !(item.restaurantId === restaurantId && item.menuItem.id === menuItemId)
-                ),
-            });
-        } else {
-            const updatedCart = cartItems.map((item) =>
-                item.restaurantId === restaurantId && item.menuItem.id === menuItemId
-                    ? { ...item, quantity: newQuantity }
-                    : item
-            );
-            set({ cartItems: updatedCart });
-        }
-    },
-
-    /**
-     * Remove item from cart
-     * @param {number} restaurantId
-     * @param {number} menuItemId
-     */
-    removeFromCart: (restaurantId, menuItemId) => {
-        const { cartItems } = get();
-        set({
-            cartItems: cartItems.filter(
-                (item) =>
-                    !(item.restaurantId === restaurantId && item.menuItem.id === menuItemId)
-            ),
-        });
-    },
-
-    /**
-     * Clear all items from cart
-     */
-    clearCart: () => {
-        set({ cartItems: [] });
-    },
-
-    /**
-     * Get total number of items in cart
-     */
-    getCartCount: () => {
-        const { cartItems } = get();
-        return cartItems.reduce((total, item) => total + item.quantity, 0);
-    },
-
-    /**
-     * Get total price of all items in cart
-     */
-    getTotalPrice: () => {
-        const { cartItems } = get();
-        return cartItems.reduce(
-            (total, item) => total + item.menuItem.price * item.quantity,
-            0
-        );
-    },
-}));
+    )
+);
 
 export default useCartStore;

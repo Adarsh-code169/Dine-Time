@@ -1,45 +1,32 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-/**
- * Favorites Store using Zustand
- * Manages favorite restaurants
- */
-const useFavoritesStore = create((set, get) => ({
-    // Array of favorite restaurant IDs
-    favorites: [],
+const useFavoritesStore = create(
+    persist(
+        (set, get) => ({
+            favorites: [],
 
-    /**
-     * Toggle favorite status of a restaurant
-     * @param {number} restaurantId
-     */
-    toggleFavorite: (restaurantId) => {
-        const { favorites } = get();
-        if (favorites.includes(restaurantId)) {
-            // Remove from favorites
-            set({ favorites: favorites.filter((id) => id !== restaurantId) });
-        } else {
-            // Add to favorites
-            set({ favorites: [...favorites, restaurantId] });
+            toggleFavorite: (restaurantId) => {
+                const { favorites } = get();
+                if (favorites.includes(restaurantId)) {
+                    set({ favorites: favorites.filter((id) => id !== restaurantId) });
+                } else {
+                    set({ favorites: [...favorites, restaurantId] });
+                }
+            },
+
+            isFavorite: (restaurantId) => get().favorites.includes(restaurantId),
+
+            getFavorites: () => get().favorites,
+
+            clearFavorites: () => set({ favorites: [] }),
+        }),
+        {
+            name: 'dinetime-favorites',
+            storage: createJSONStorage(() => AsyncStorage),
         }
-    },
-
-    /**
-     * Check if a restaurant is favorited
-     * @param {number} restaurantId
-     * @returns {boolean}
-     */
-    isFavorite: (restaurantId) => {
-        const { favorites } = get();
-        return favorites.includes(restaurantId);
-    },
-
-    /**
-     * Get all favorite restaurant IDs
-     * @returns {Array<number>}
-     */
-    getFavorites: () => {
-        return get().favorites;
-    },
-}));
+    )
+);
 
 export default useFavoritesStore;
